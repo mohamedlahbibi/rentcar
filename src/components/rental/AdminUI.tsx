@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
-import { BarChart3, Bell, Car, FileText, Gauge, LayoutDashboard, Plus, Settings, ShieldCheck, UserCog, Users, Wrench } from "lucide-react";
+import { BarChart3, Bell, Car, FileText, LayoutDashboard, Plus, ShieldCheck, UserCog, Users, Wrench, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { cars, clients, maintenanceRows, reservations } from "@/data/rentalMock";
 
-const nav = [
+const nav: Array<[string, string, LucideIcon]> = [
   ["Dashboard", "/admin", LayoutDashboard], ["Cars", "/admin/cars", Car], ["Reservations", "/admin/reservations", Bell], ["Clients", "/admin/clients", Users], ["Managers", "/admin/managers", UserCog],
 ];
 
 function AdminShell({ title, children }: { title: string; children: React.ReactNode }) {
-  return <div className="min-h-screen bg-admin-panel text-primary-foreground"><div className="flex"><aside className="sticky top-0 hidden h-screen w-72 border-r border-primary-foreground/10 bg-primary/30 p-5 backdrop-blur-xl lg:block"><Link to="/" className="mb-8 flex items-center gap-3 font-display text-xl font-extrabold"><span className="grid size-10 place-items-center rounded-md bg-secondary text-secondary-foreground">TN</span>RouteRent CRM</Link><nav className="space-y-2">{nav.map(([label, href, Icon]) => <Link key={label as string} to={href as string} className="flex items-center gap-3 rounded-md px-3 py-3 text-sm font-bold text-primary-foreground/78 transition hover:bg-primary-foreground/10 hover:text-primary-foreground"><Icon className="size-4" />{label as string}</Link>)}</nav></aside><main className="min-w-0 flex-1 p-4 lg:p-8"><header className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center"><div><p className="font-bold text-secondary">Admin / Manager</p><h1 className="text-4xl font-extrabold">{title}</h1></div><div className="flex gap-2"><Button asChild variant="admin"><Link to="/">Client site</Link></Button><Button variant="hero"><Plus className="size-4" />New</Button></div></header>{children}</main></div></div>;
+  return <div className="min-h-screen bg-admin-panel text-primary-foreground"><div className="flex"><aside className="sticky top-0 hidden h-screen w-72 border-r border-primary-foreground/10 bg-primary/30 p-5 backdrop-blur-xl lg:block"><Link to="/" className="mb-8 flex items-center gap-3 font-display text-xl font-extrabold"><span className="grid size-10 place-items-center rounded-md bg-secondary text-secondary-foreground">TN</span>RouteRent CRM</Link><nav className="space-y-2">{nav.map(([label, href, Icon]) => <Link key={label} to={href} className="flex items-center gap-3 rounded-md px-3 py-3 text-sm font-bold text-primary-foreground/78 transition hover:bg-primary-foreground/10 hover:text-primary-foreground"><Icon className="size-4" />{label}</Link>)}</nav></aside><main className="min-w-0 flex-1 p-4 lg:p-8"><header className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center"><div><p className="font-bold text-secondary">Admin / Manager</p><h1 className="text-4xl font-extrabold">{title}</h1></div><div className="flex gap-2"><Button asChild variant="admin"><Link to="/">Client site</Link></Button><Button variant="hero"><Plus className="size-4" />New</Button></div></header>{children}</main></div></div>;
 }
 
 function Panel({ children, className = "" }: { children: React.ReactNode; className?: string }) { return <Card className={`border-primary-foreground/10 bg-surface-elevated/95 text-foreground shadow-card ${className}`}>{children}</Card>; }
