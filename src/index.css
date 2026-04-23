@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,35 +10,52 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 42 38% 96%;
+    --foreground: 205 48% 11%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 38 38% 98%;
+    --card-foreground: 205 48% 11%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 38 38% 98%;
+    --popover-foreground: 205 48% 11%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 184 82% 25%;
+    --primary-foreground: 45 58% 96%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 31 83% 56%;
+    --secondary-foreground: 205 48% 11%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 43 34% 89%;
+    --muted-foreground: 205 18% 38%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 11 76% 58%;
+    --accent-foreground: 45 58% 96%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 37 24% 82%;
+    --input: 37 24% 82%;
+    --ring: 184 82% 25%;
 
-    --radius: 0.5rem;
+    --radius: 0.45rem;
+
+    --surface: 42 38% 94%;
+    --surface-elevated: 38 45% 99%;
+    --surface-soft: 184 42% 92%;
+    --success: 153 49% 33%;
+    --success-foreground: 45 58% 96%;
+    --warning: 39 92% 50%;
+    --warning-foreground: 205 48% 11%;
+    --info: 204 74% 40%;
+    --info-foreground: 45 58% 96%;
+    --gradient-hero: radial-gradient(circle at 22% 18%, hsl(31 83% 56% / 0.2), transparent 30%), linear-gradient(135deg, hsl(42 38% 96%) 0%, hsl(184 42% 92%) 54%, hsl(38 45% 99%) 100%);
+    --gradient-sunset: linear-gradient(90deg, hsl(184 82% 25%), hsl(31 83% 56%), hsl(11 76% 58%));
+    --gradient-admin: linear-gradient(145deg, hsl(204 54% 14%) 0%, hsl(184 82% 20%) 58%, hsl(205 48% 11%) 100%);
+    --gradient-metal: linear-gradient(135deg, hsl(38 45% 99%), hsl(43 34% 89%));
+    --shadow-soft: 0 18px 60px -28px hsl(205 48% 11% / 0.35);
+    --shadow-card: 0 18px 40px -24px hsl(184 82% 25% / 0.38);
+    --shadow-glow: 0 0 0 1px hsl(31 83% 56% / 0.12), 0 18px 55px -28px hsl(31 83% 56% / 0.7);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +119,29 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-body antialiased;
+    font-feature-settings: "liga" 1, "kern" 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+    letter-spacing: 0;
+  }
+
+  ::selection {
+    @apply bg-secondary text-secondary-foreground;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply border border-border/70 bg-surface-elevated/80 shadow-card backdrop-blur-xl;
+  }
+
+  .focus-tune {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
 }

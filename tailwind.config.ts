@@ -57,11 +57,43 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        surface: {
+          DEFAULT: "hsl(var(--surface))",
+          elevated: "hsl(var(--surface-elevated))",
+          soft: "hsl(var(--surface-soft))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+        },
+      },
+      fontFamily: {
+        display: ["Sora", "system-ui", "sans-serif"],
+        body: ["Manrope", "system-ui", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        soft: "var(--shadow-soft)",
+        card: "var(--shadow-card)",
+        glow: "var(--shadow-glow)",
+      },
+      backgroundImage: {
+        "hero-field": "var(--gradient-hero)",
+        "sunset-line": "var(--gradient-sunset)",
+        "admin-panel": "var(--gradient-admin)",
+        "metal": "var(--gradient-metal)",
       },
       keyframes: {
         "accordion-down": {
@@ -80,10 +112,20 @@ export default {
             height: "0",
           },
         },
+        "float-drive": {
+          "0%, 100%": { transform: "translate3d(0, 0, 0) rotate(-1deg)" },
+          "50%": { transform: "translate3d(10px, -8px, 0) rotate(1deg)" },
+        },
+        "reveal-up": {
+          from: { opacity: "0", transform: "translateY(18px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "float-drive": "float-drive 7s ease-in-out infinite",
+        "reveal-up": "reveal-up 0.7s ease-out both",
       },
     },
   },
