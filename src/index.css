@@ -1,115 +1,125 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 42 38% 96%;
-    --foreground: 205 48% 11%;
+    /* ── Warm Mediterranean editorial palette ── */
+    /* paper #F4EFE6 */
+    --background:   38 39% 93%;
+    --foreground:   33 15% 9%;      /* ink #1A1713 */
 
-    --card: 38 38% 98%;
-    --card-foreground: 205 48% 11%;
+    /* card = white */
+    --card:         0 0% 100%;
+    --card-foreground: 33 15% 9%;
 
-    --popover: 38 38% 98%;
-    --popover-foreground: 205 48% 11%;
+    --popover:      0 0% 100%;
+    --popover-foreground: 33 15% 9%;
 
-    --primary: 184 82% 25%;
-    --primary-foreground: 45 58% 96%;
+    /* primary = terracotta #B7452B */
+    --primary:      11 62% 44%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 31 83% 56%;
-    --secondary-foreground: 205 48% 11%;
+    /* secondary = sea #1F4E5F */
+    --secondary:    198 51% 24%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 43 34% 89%;
-    --muted-foreground: 205 18% 38%;
+    /* muted = paper-2 #EBE4D6 */
+    --muted:        40 35% 88%;
+    --muted-foreground: 28 13% 37%; /* ink-3 #6B6152 */
 
-    --accent: 11 76% 58%;
-    --accent-foreground: 45 58% 96%;
+    /* accent = paper-2 (hover fill) */
+    --accent:       40 35% 88%;
+    --accent-foreground: 33 15% 9%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive:  0 52% 42%;      /* danger #A63333 */
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 37 24% 82%;
-    --input: 37 24% 82%;
-    --ring: 184 82% 25%;
+    --border:       41 23% 73%;     /* line #C9BFA9 */
+    --input:        40 35% 88%;     /* paper-2 */
+    --ring:         11 62% 44%;     /* terracotta */
 
-    --radius: 0.45rem;
+    --radius: 0.75rem;
 
-    --surface: 42 38% 94%;
-    --surface-elevated: 38 45% 99%;
-    --surface-soft: 184 42% 92%;
-    --success: 153 49% 33%;
-    --success-foreground: 45 58% 96%;
-    --warning: 39 92% 50%;
-    --warning-foreground: 205 48% 11%;
-    --info: 204 74% 40%;
-    --info-foreground: 45 58% 96%;
-    --gradient-hero: radial-gradient(circle at 22% 18%, hsl(31 83% 56% / 0.2), transparent 30%), linear-gradient(135deg, hsl(42 38% 96%) 0%, hsl(184 42% 92%) 54%, hsl(38 45% 99%) 100%);
-    --gradient-sunset: linear-gradient(90deg, hsl(184 82% 25%), hsl(31 83% 56%), hsl(11 76% 58%));
-    --gradient-admin: linear-gradient(145deg, hsl(204 54% 14%) 0%, hsl(184 82% 20%) 58%, hsl(205 48% 11%) 100%);
-    --gradient-metal: linear-gradient(135deg, hsl(38 45% 99%), hsl(43 34% 89%));
-    --shadow-soft: 0 18px 60px -28px hsl(205 48% 11% / 0.35);
-    --shadow-card: 0 18px 40px -24px hsl(184 82% 25% / 0.38);
-    --shadow-glow: 0 0 0 1px hsl(31 83% 56% / 0.12), 0 18px 55px -28px hsl(31 83% 56% / 0.7);
+    /* ── Named tokens for direct use ── */
+    --paper:        #F4EFE6;
+    --paper-2:      #EBE4D6;
+    --paper-3:      #DDD3BF;
+    --ink:          #1A1713;
+    --ink-2:        #3B342A;
+    --ink-3:        #6B6152;
+    --line:         #C9BFA9;
+    --line-2:       #E0D6C0;
+    --accent-color: #B7452B;
+    --accent-hover: #9E3A23;
+    --accent-tint:  #EAD4C9;
+    --sea:          #1F4E5F;
 
-    --sidebar-background: 0 0% 98%;
+    --header-h: 72px;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --shadow-sm: 0 1px 2px rgba(26,23,19,0.06), 0 2px 4px rgba(26,23,19,0.04);
+    --shadow-md: 0 4px 12px rgba(26,23,19,0.08), 0 2px 4px rgba(26,23,19,0.05);
+    --shadow-lg: 0 20px 50px -20px rgba(26,23,19,0.35), 0 8px 16px rgba(26,23,19,0.08);
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* ── shadcn sidebar ── */
+    --sidebar-background: 38 39% 93%;
+    --sidebar-foreground: 33 15% 9%;
+    --sidebar-primary:    11 62% 44%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent:     40 35% 88%;
+    --sidebar-accent-foreground: 33 15% 9%;
+    --sidebar-border:     41 23% 73%;
+    --sidebar-ring:       11 62% 44%;
 
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* legacy gradient / shadow tokens kept for AdminUI */
+    --surface:          0 0% 100%;
+    --surface-elevated: 0 0% 100%;
+    --surface-soft:     40 35% 88%;
+    --success:          148 33% 36%;
+    --success-foreground: 0 0% 100%;
+    --warning:          37 63% 48%;
+    --warning-foreground: 33 15% 9%;
+    --info:             198 51% 24%;
+    --info-foreground:  0 0% 100%;
+    --shadow-soft:      var(--shadow-sm);
+    --shadow-card:      var(--shadow-md);
+    --shadow-glow:      0 0 0 1px rgba(183,69,43,0.15), 0 8px 32px -8px rgba(183,69,43,0.25);
+    --gradient-hero:    linear-gradient(135deg, rgba(183,69,43,0.05) 0%, rgba(244,239,230,1) 100%);
+    --gradient-sunset:  linear-gradient(90deg, #B7452B, #C96B2A);
+    --gradient-admin:   linear-gradient(145deg, #1A1713 0%, #3B342A 100%);
+    --gradient-metal:   linear-gradient(135deg, #f5f5f5, #ebebeb);
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --background:   33 15% 9%;
+    --foreground:   38 39% 93%;
+    --card:         28 16% 13%;
+    --card-foreground: 38 39% 93%;
+    --popover:      28 16% 13%;
+    --popover-foreground: 38 39% 93%;
+    --primary:      11 62% 54%;
+    --primary-foreground: 0 0% 100%;
+    --secondary:    198 45% 30%;
+    --secondary-foreground: 0 0% 100%;
+    --muted:        28 16% 19%;
+    --muted-foreground: 37 18% 55%;
+    --accent:       28 16% 19%;
+    --accent-foreground: 38 39% 93%;
+    --destructive:  0 52% 52%;
+    --destructive-foreground: 0 0% 100%;
+    --border:       28 16% 25%;
+    --input:        28 16% 19%;
+    --ring:         11 62% 54%;
+    --sidebar-background: 28 16% 13%;
+    --sidebar-foreground: 38 39% 93%;
+    --sidebar-primary: 11 62% 54%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 28 16% 19%;
+    --sidebar-accent-foreground: 38 39% 93%;
+    --sidebar-border: 28 16% 25%;
+    --sidebar-ring:  11 62% 54%;
   }
 }
 
@@ -118,27 +128,83 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground font-body antialiased;
-    font-feature-settings: "liga" 1, "kern" 1;
+  html {
+    font-size: 15px;
   }
 
-  h1,
-  h2,
-  h3,
-  h4 {
-    @apply font-display;
-    letter-spacing: 0;
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: "liga" 1, "kern" 1;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Fraunces', Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+
+  [lang="ar"] body,
+  [lang="ar"] {
+    font-family: 'Noto Naskh Arabic', sans-serif;
   }
 
   ::selection {
-    @apply bg-secondary text-secondary-foreground;
+    background: var(--accent-tint);
+    color: var(--ink);
   }
 }
 
+/* ── Airbnb-style range band for hero date picker ──────────────────────────── */
+.drp-hero .drp-cell:has(.day-range-middle) {
+  background-color: #fde8e2;
+  border-radius: 0;
+}
+.drp-hero .drp-cell:has(.day-range-start):not(:has(.day-range-end)) {
+  background: linear-gradient(to right, transparent 50%, #fde8e2 50%);
+}
+.drp-hero .drp-cell:has(.day-range-end):not(:has(.day-range-start)) {
+  background: linear-gradient(to left, transparent 50%, #fde8e2 50%);
+}
+/* Hover preview while picking end date */
+.drp-hero .drp-cell:has(.day-range-middle) button {
+  background: transparent !important;
+  color: #1a1713;
+}
+
 @layer components {
+  /* Eyebrow label style */
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground;
+  }
+
+  /* Mono price style */
+  .price-mono {
+    font-family: 'JetBrains Mono', monospace;
+    @apply font-semibold;
+  }
+
+  /* Hairline divider */
+  .hairline {
+    border-color: var(--line-2);
+  }
+
+  /* Glass/floating card */
   .glass-panel {
-    @apply border border-border/70 bg-surface-elevated/80 shadow-card backdrop-blur-xl;
+    @apply border border-border/70 bg-white/90 shadow-[var(--shadow-lg)] backdrop-blur-xl;
+  }
+
+  /* Filter pill */
+  .filter-pill {
+    @apply h-8 rounded-full border px-3 text-xs font-medium transition-colors;
+    border-color: var(--line);
+    color: var(--ink-2);
+  }
+  .filter-pill:hover,
+  .filter-pill.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
   }
 
   .focus-tune {

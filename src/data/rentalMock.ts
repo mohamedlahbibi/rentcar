@@ -1,9 +1,9 @@
 import fleetHero from "@/assets/tunisian-rental-fleet.jpg";
+import type { ReservationStatus } from "@/types/database";
 
-export type ReservationStatus = "PENDING" | "CONFIRMED" | "REJECTED" | "COMPLETED" | "CANCELLED";
+export const carTypes = ["Citadine", "SUV", "Berline", "Utilitaire"] as const;
 
-export const carTypes = ["Citadine", "SUV", "Berline", "Utilitaire"];
-
+// Mock cars — field names match the DB schema (snake_case)
 export const cars = [
   {
     id: "clio-2023",
@@ -15,12 +15,13 @@ export const cars = [
     transmission: "Automatique",
     seats: 5,
     mileage: 18500,
-    pricePerDay: 125,
+    price_per_day: 125,
     color: "Bleu nuit",
     matricule: "214 TN 7821",
-    isAvailable: true,
+    is_available: true,
     images: [fleetHero],
     notes: "Compacte premium pour ville et aéroport.",
+    created_at: "2026-01-01T00:00:00Z",
   },
   {
     id: "tucson-2022",
@@ -32,12 +33,13 @@ export const cars = [
     transmission: "Automatique",
     seats: 5,
     mileage: 40200,
-    pricePerDay: 240,
+    price_per_day: 240,
     color: "Gris graphite",
     matricule: "211 TN 4420",
-    isAvailable: true,
+    is_available: true,
     images: [fleetHero],
     notes: "SUV confortable pour longues distances.",
+    created_at: "2026-01-01T00:00:00Z",
   },
   {
     id: "corolla-2021",
@@ -49,12 +51,13 @@ export const cars = [
     transmission: "Automatique",
     seats: 5,
     mileage: 52000,
-    pricePerDay: 190,
+    price_per_day: 190,
     color: "Blanc perle",
     matricule: "208 TN 5539",
-    isAvailable: false,
+    is_available: false,
     images: [fleetHero],
     notes: "Très économique, idéale business.",
+    created_at: "2026-01-01T00:00:00Z",
   },
   {
     id: "partner-2020",
@@ -66,12 +69,13 @@ export const cars = [
     transmission: "Manuelle",
     seats: 3,
     mileage: 73500,
-    pricePerDay: 165,
+    price_per_day: 165,
     color: "Argent",
     matricule: "205 TN 9014",
-    isAvailable: true,
+    is_available: true,
     images: [fleetHero],
     notes: "Volume utile pour livraisons locales.",
+    created_at: "2026-01-01T00:00:00Z",
   },
 ];
 
