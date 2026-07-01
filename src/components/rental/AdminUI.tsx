@@ -1854,10 +1854,10 @@ body{font-family:Arial,sans-serif;font-size:9.5px;color:#000;background:#fff}
 .cl{padding-right:5px}.cr{padding-left:5px}
 .div{background:#000}
 /* section headers */
-.sh{background:#F5B800;display:flex;justify-content:space-between;align-items:center;padding:2px 5px;margin:3px 0 2px;border:1px solid #C9A000}
-.sh .fr{font-weight:bold;font-size:9px}
-.sh .fri{font-weight:bold;font-style:italic;font-size:9px}
-.sh .ar{font-weight:bold;font-size:9px;direction:rtl;font-family:Arial,sans-serif}
+.sh{background:#CC0000;display:flex;justify-content:space-between;align-items:center;padding:2px 5px;margin:3px 0 2px;border:1px solid #AA0000}
+.sh .fr{font-weight:bold;font-size:9px;color:#fff}
+.sh .fri{font-weight:bold;font-style:italic;font-size:9px;color:#fff}
+.sh .ar{font-weight:bold;font-size:9px;direction:rtl;font-family:Arial,sans-serif;color:#fff}
 /* fields */
 .f{display:flex;align-items:baseline;gap:2px;border-bottom:1px dotted #aaa;min-height:13px;margin-bottom:1px;padding-bottom:1px}
 .fl{font-size:8px;white-space:nowrap;flex-shrink:0}
