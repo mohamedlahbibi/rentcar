@@ -86,22 +86,18 @@ function Header({ overlay = false }: { overlay?: boolean }) {
 
         {/* Nav links */}
         <div className="hidden items-center gap-8 text-sm font-medium md:flex">
-          <Link
-            to="/"
-            className="py-1 transition-colors hover:opacity-70"
-            style={{ color: "var(--ink-2)" }}
-          >
-            {t.chooseVehicle}
+          <Link to="/" className="py-1 transition-colors hover:opacity-70" style={{ color: "var(--ink-2)" }}>
+            {t.navHome}
           </Link>
-          {user?.role === "CLIENT" && (
-            <Link
-              to="/account"
-              className="py-1 transition-colors hover:opacity-70"
-              style={{ color: "var(--ink-2)" }}
-            >
-              {t.myAccount}
-            </Link>
-          )}
+          <Link to="/fleet" className="py-1 transition-colors hover:opacity-70" style={{ color: "var(--ink-2)" }}>
+            {t.fleetNav}
+          </Link>
+          <a href="/#how-it-works" className="py-1 transition-colors hover:opacity-70" style={{ color: "var(--ink-2)" }}>
+            {t.navHowItWorks}
+          </a>
+          <a href="/#contact" className="py-1 transition-colors hover:opacity-70" style={{ color: "var(--ink-2)" }}>
+            {t.navContact}
+          </a>
         </div>
 
         {/* Right controls */}
@@ -354,16 +350,17 @@ function HeroSearchBar({ startDate, endDate, onDatesChange, onSearch }: HeroSear
   const calendarPopover = (
     <PopoverContent
       className="w-auto p-0 overflow-hidden bg-white"
-      align="start"
+      align="center"
       side="bottom"
       sideOffset={10}
-      avoidCollisions={false}
+      avoidCollisions={true}
+      collisionPadding={16}
       style={{
         zIndex: 100,
         borderRadius: "16px",
         border: "1px solid rgba(26,23,19,0.09)",
         boxShadow: "0 12px 40px -4px rgba(26,23,19,0.18), 0 4px 12px -2px rgba(26,23,19,0.08)",
-        minWidth: "320px",
+        width: "min(380px, calc(100vw - 32px))",
       }}
     >
       {/* ── Instruction header ── */}
@@ -513,7 +510,7 @@ function HeroSearchBar({ startDate, endDate, onDatesChange, onSearch }: HeroSear
 
           {/* ── Mobile / tablet card (<lg) ── */}
           <div className="flex lg:hidden w-full flex-col overflow-hidden"
-            style={{ background: "white", borderRadius: "16px", boxShadow: "0 20px 50px -20px rgba(26,23,19,0.35), 0 8px 16px rgba(26,23,19,0.08)" }}>
+            style={{ background: "white", borderRadius: "16px", boxShadow: "0 20px 50px -20px rgba(26,23,19,0.35), 0 8px 16px rgba(26,23,19,0.08)", maxWidth: "100%" }}>
             <div className="grid grid-cols-2">
               <button className="flex flex-col items-start p-4 transition-colors hover:bg-paper"
                 style={{ borderRight: "1px solid var(--line-2)", borderBottom: "1px solid var(--line-2)" }}
@@ -597,7 +594,7 @@ function HowItWorks() {
   ];
 
   return (
-    <section style={{ background: "var(--paper-2)" }} className="py-12 md:py-20">
+    <section id="how-it-works" style={{ background: "var(--paper-2)" }} className="py-12 md:py-20">
       <div className="mx-auto max-w-[1280px] px-4 md:px-8">
         <div className="mb-8 md:mb-14 flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -821,7 +818,7 @@ function ReassuranceBand() {
 function Footer() {
   const { t } = useLang();
   return (
-    <footer style={{ background: "var(--ink)", color: "rgba(244,239,230,0.7)" }}>
+    <footer id="contact" style={{ background: "var(--ink)", color: "rgba(244,239,230,0.7)" }}>
       <div className="mx-auto max-w-[1280px] px-8 py-16">
         <div className="mb-12 grid gap-10 border-b pb-12 md:grid-cols-2 lg:grid-cols-4"
           style={{ borderColor: "rgba(244,239,230,0.1)" }}>
@@ -933,19 +930,17 @@ export function LandingPage() {
           </Link>
 
           <div className="hidden items-center gap-8 text-sm font-medium md:flex">
-            <Link
-              to="/fleet"
-              className="transition-opacity hover:opacity-70"
-              style={{ color: "var(--ink-2)" }}
-            >
+            <Link to="/" className="transition-opacity hover:opacity-70" style={{ color: "var(--ink-2)" }}>
+              {t.navHome}
+            </Link>
+            <Link to="/fleet" className="transition-opacity hover:opacity-70" style={{ color: "var(--ink-2)" }}>
               {t.fleetNav}
             </Link>
-            <a
-              href="#fleet"
-              className="transition-opacity hover:opacity-70"
-              style={{ color: "var(--ink-2)" }}
-            >
-              {t.chooseVehicle}
+            <a href="#how-it-works" className="transition-opacity hover:opacity-70" style={{ color: "var(--ink-2)" }}>
+              {t.navHowItWorks}
+            </a>
+            <a href="#contact" className="transition-opacity hover:opacity-70" style={{ color: "var(--ink-2)" }}>
+              {t.navContact}
             </a>
           </div>
 
@@ -973,40 +968,38 @@ export function LandingPage() {
 
           {/* Hero content — bottom-aligned */}
           <div
-            className="relative z-10 mx-auto flex max-w-[1280px] flex-col justify-end px-8 pb-20"
+            className="relative z-10 mx-auto flex max-w-[1280px] w-full flex-col justify-end px-4 md:px-8 pb-16 md:pb-20"
             style={{ minHeight: "95vh" }}
           >
-            <div className="max-w-3xl space-y-6">
-              {/* Eyebrow */}
-              <p
-                className="text-[11px] font-semibold uppercase tracking-[0.14em]"
-                style={{ color: "rgba(244,239,230,0.8)" }}
-              >
-                {t.heroEyebrow}
-              </p>
+            <div className="w-full space-y-6">
+              {/* Text block — constrained */}
+              <div className="max-w-2xl space-y-4">
+                <p
+                  className="text-[11px] font-semibold uppercase tracking-[0.14em]"
+                  style={{ color: "rgba(244,239,230,0.8)" }}
+                >
+                  {t.heroEyebrow}
+                </p>
+                <h1
+                  style={{
+                    fontFamily: "'Fraunces', Georgia, serif",
+                    fontSize: "clamp(40px, 7vw, 96px)",
+                    fontWeight: 300,
+                    letterSpacing: "-0.02em",
+                    lineHeight: 1.05,
+                    color: "white",
+                    textWrap: "balance",
+                  } as React.CSSProperties}
+                >
+                  {t.heroMainTitle}
+                </h1>
+                <p className="max-w-xl text-[17px] leading-[1.55]" style={{ color: "rgba(244,239,230,0.82)" }}>
+                  {t.heroMainSubtitle}
+                </p>
+              </div>
 
-              {/* Title */}
-              <h1
-                style={{
-                  fontFamily: "'Fraunces', Georgia, serif",
-                  fontSize: "clamp(48px, 7vw, 96px)",
-                  fontWeight: 300,
-                  letterSpacing: "-0.02em",
-                  lineHeight: 1.05,
-                  color: "white",
-                  textWrap: "balance",
-                } as React.CSSProperties}
-              >
-                {t.heroMainTitle}
-              </h1>
-
-              {/* Subtitle */}
-              <p className="max-w-xl text-[17px] leading-[1.55]" style={{ color: "rgba(244,239,230,0.82)" }}>
-                {t.heroMainSubtitle}
-              </p>
-
-              {/* Search bar */}
-              <div className="w-full max-w-3xl">
+              {/* Search bar — full width, centered */}
+              <div className="w-full max-w-5xl mx-auto">
                 <HeroSearchBar
                   startDate={localStart}
                   endDate={localEnd}
@@ -1016,7 +1009,7 @@ export function LandingPage() {
               </div>
 
               {/* Trust strip */}
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-2">
+              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-1 w-full max-w-5xl mx-auto">
                 {[
                   { icon: "🛡️", label: t.trustInsurance },
                   { icon: "∞", label: t.trustKm },

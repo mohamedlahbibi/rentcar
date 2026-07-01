@@ -170,7 +170,10 @@ const T = {
     fleetPageSubtitle: "Discover all our vehicles available for rental. Filter by type to find the perfect vehicle for your needs.",
     fleetNoCars: "No vehicles in this category.",
     viewFleetPage: "View full fleet",
-    fleetNav: "Fleet",
+    fleetNav: "Our Fleet",
+    navHome: "Home",
+    navHowItWorks: "How it Works",
+    navContact: "Contact",
   },
   fr: {
     heroLocation: "Tunis · Hammamet · Aéroport",
@@ -339,7 +342,10 @@ const T = {
     fleetPageSubtitle: "Découvrez l'ensemble de nos véhicules disponibles à la location. Filtrez par type pour trouver le véhicule parfait pour vos besoins.",
     fleetNoCars: "Aucun véhicule dans cette catégorie.",
     viewFleetPage: "Voir toute la flotte",
-    fleetNav: "Flotte",
+    fleetNav: "Notre Flotte",
+    navHome: "Accueil",
+    navHowItWorks: "Comment ça marche",
+    navContact: "Contact",
   },
   ar: {
     heroLocation: "تونس · الحمامات · المطار",
@@ -508,7 +514,10 @@ const T = {
     fleetPageSubtitle: "اكتشف جميع مركباتنا المتاحة للإيجار. فلتر حسب النوع للعثور على السيارة المثالية لاحتياجاتك.",
     fleetNoCars: "لا توجد مركبات في هذه الفئة.",
     viewFleetPage: "عرض الأسطول الكامل",
-    fleetNav: "الأسطول",
+    fleetNav: "أسطولنا",
+    navHome: "الرئيسية",
+    navHowItWorks: "كيف يعمل",
+    navContact: "اتصل بنا",
   },
 } as const;
 

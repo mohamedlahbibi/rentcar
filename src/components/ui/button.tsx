@@ -17,10 +17,10 @@ const buttonVariants = cva(
         link:        "text-primary underline-offset-4 hover:underline",
         /* terracotta CTA — the main action button */
         hero:        "bg-primary text-primary-foreground shadow-[var(--shadow-md)] hover:bg-[#9E3A23] hover:-translate-y-0.5",
-        /* ink-filled for active filter pills */
-        premium:     "bg-[#1A1713] text-[#F4EFE6] border border-[#1A1713]",
-        /* soft paper-2 for admin */
-        admin:       "bg-muted text-foreground border border-border hover:bg-[#DDD3BF]",
+        /* dark fill for primary CTA in admin context */
+        premium:     "bg-slate-900 text-white border border-slate-900 hover:bg-slate-800",
+        /* neutral secondary for admin actions */
+        admin:       "bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 hover:text-slate-900",
       },
       size: {
         default: "h-11 px-5 py-2",

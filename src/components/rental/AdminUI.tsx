@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { BarChart3, Bell, Calendar, Car, Check, ChevronLeft, ChevronRight, Copy, Download, FileText, GripVertical, LayoutDashboard, LogOut, Plus, Trash2, UserCog, Users, Wrench, X, type LucideIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -29,50 +29,53 @@ const nav: Array<[string, string, LucideIcon]> = [
 
 function AdminShell({ title, children, onNew }: { title: string; children: React.ReactNode; onNew?: () => void }) {
   const { user, signOut } = useAuth();
+  const { pathname } = useLocation();
   return (
-    <div className="min-h-screen bg-admin-panel text-primary-foreground">
-      <div className="flex">
-        <aside className="sticky top-0 hidden h-screen w-72 flex-col border-r border-primary-foreground/10 bg-primary/30 p-5 backdrop-blur-xl lg:flex">
-          <Link to="/" className="mb-8 flex items-center gap-3 font-display text-xl font-extrabold">
-            <span className="grid size-10 place-items-center rounded-md bg-secondary text-secondary-foreground">TN</span>
-            RouteRent CRM
-          </Link>
-          <nav className="flex-1 space-y-2">
-            {nav.map(([label, href, Icon]) => (
-              <Link key={label} to={href} className="flex items-center gap-3 rounded-md px-3 py-3 text-sm font-bold text-primary-foreground/78 transition hover:bg-primary-foreground/10 hover:text-primary-foreground">
-                <Icon className="size-4" />{label}
+    <div className="flex min-h-screen bg-slate-50">
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col bg-[#0F172A] p-5 lg:flex">
+        <Link to="/" className="mb-8 flex items-center gap-2.5">
+          <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-blue-600 text-sm font-black text-white">D</span>
+          <span className="text-base font-bold tracking-tight text-white">DriveEasy CRM</span>
+        </Link>
+        <nav className="flex-1 space-y-0.5">
+          {nav.map(([label, href, Icon]) => {
+            const active = pathname === href || (href !== "/admin" && pathname.startsWith(href));
+            return (
+              <Link key={label} to={href} className={`relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] font-medium transition ${active ? "bg-slate-800 text-white" : "text-slate-300 hover:bg-slate-800/60 hover:text-white"}`}>
+                {active && <span className="absolute left-0 inset-y-2 w-0.5 rounded-full bg-blue-500" />}
+                <Icon className="size-4 shrink-0" />{label}
               </Link>
-            ))}
-          </nav>
-          <div className="border-t border-primary-foreground/10 pt-4">
-            <p className="mb-2 truncate px-3 text-xs font-medium text-primary-foreground/50">{user?.email}</p>
-            <button
-              onClick={() => signOut()}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-3 text-sm font-bold text-primary-foreground/78 transition hover:bg-primary-foreground/10 hover:text-primary-foreground"
-            >
-              <LogOut className="size-4" />Déconnexion
-            </button>
+            );
+          })}
+        </nav>
+        <div className="border-t border-slate-800 pt-4">
+          <p className="mb-2 truncate px-3 text-xs text-slate-500">{user?.email}</p>
+          <button
+            onClick={() => signOut()}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white"
+          >
+            <LogOut className="size-4" />Déconnexion
+          </button>
+        </div>
+      </aside>
+      <main className="min-w-0 flex-1 p-6 lg:p-8">
+        <header className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Administration</p>
+            <h1 className="mt-1 text-2xl font-bold text-slate-900">{title}</h1>
           </div>
-        </aside>
-        <main className="min-w-0 flex-1 p-4 lg:p-8">
-          <header className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
-            <div>
-              <p className="font-bold text-secondary">Admin / Manager</p>
-              <h1 className="text-4xl font-extrabold">{title}</h1>
-            </div>
-            <div className="flex gap-2">
-              <Button asChild variant="admin"><Link to="/">Client site</Link></Button>
-              {onNew && <Button variant="hero" onClick={onNew}><Plus className="size-4" />New</Button>}
-            </div>
-          </header>
-          {children}
-        </main>
-      </div>
+          <div className="flex gap-2">
+            <Button asChild variant="admin"><Link to="/">Site client</Link></Button>
+            {onNew && <Button variant="hero" onClick={onNew}><Plus className="size-4" />Nouveau</Button>}
+          </div>
+        </header>
+        {children}
+      </main>
     </div>
   );
 }
 
-function Panel({ children, className = "" }: { children: React.ReactNode; className?: string }) { return <Card className={`border-primary-foreground/10 bg-surface-elevated/95 text-foreground shadow-card ${className}`}>{children}</Card>; }
+function Panel({ children, className = "" }: { children: React.ReactNode; className?: string }) { return <Card className={`border border-slate-200 bg-white text-slate-900 shadow-sm ${className}`}>{children}</Card>; }
 
 // ─── Car form ──────────────────────────────────────────────────────────────
 
@@ -340,12 +343,12 @@ function CarDialog({
 
 // ─── Shared constants ──────────────────────────────────────────────────────
 
-const STATUS_LABELS: Record<ReservationStatus, { label: string; cls: string }> = {
-  PENDING:   { label: "En attente", cls: "bg-warning/20 text-warning-foreground border border-warning/40" },
-  CONFIRMED: { label: "Confirmée",  cls: "bg-success/15 text-success border border-success/30" },
-  REJECTED:  { label: "Refusée",    cls: "bg-destructive/10 text-destructive border border-destructive/20" },
-  COMPLETED: { label: "Terminée",   cls: "bg-muted text-muted-foreground border border-border" },
-  CANCELLED: { label: "Annulée",    cls: "bg-muted text-muted-foreground border border-border" },
+const STATUS_LABELS: Record<ReservationStatus, { label: string; cls: string; bar: string }> = {
+  PENDING:   { label: "En attente", cls: "bg-amber-50 text-amber-700 border border-amber-200",     bar: "bg-amber-400" },
+  CONFIRMED: { label: "Confirmée",  cls: "bg-emerald-50 text-emerald-700 border border-emerald-200", bar: "bg-emerald-500" },
+  REJECTED:  { label: "Refusée",    cls: "bg-red-50 text-red-600 border border-red-200",           bar: "bg-red-400" },
+  COMPLETED: { label: "Terminée",   cls: "bg-slate-100 text-slate-600 border border-slate-200",    bar: "bg-slate-400" },
+  CANCELLED: { label: "Annulée",    cls: "bg-slate-100 text-slate-600 border border-slate-200",    bar: "bg-slate-300" },
 };
 
 const ALL_STATUSES: ReservationStatus[] = ["PENDING", "CONFIRMED", "REJECTED", "COMPLETED", "CANCELLED"];
@@ -380,10 +383,14 @@ export function AdminDashboard() {
       <div className="grid gap-4 md:grid-cols-4">
         {stats.map(([label, value, Icon]) => (
           <Panel key={label as string}>
-            <CardContent className="p-5">
-              <Icon className="mb-4 size-6 text-primary" />
-              <p className="text-sm font-bold text-muted-foreground">{label as string}</p>
-              <p className="font-display text-3xl font-extrabold">{value as string}</p>
+            <CardContent className="flex items-start gap-4 p-5">
+              <span className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-600">
+                <Icon className="size-4" />
+              </span>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{label as string}</p>
+                <p className="mt-0.5 text-2xl font-bold text-slate-900 tabular-nums">{value as string}</p>
+              </div>
             </CardContent>
           </Panel>
         ))}
@@ -770,7 +777,7 @@ export function AdminCarDetail() {
       <div className="mb-4 flex items-center gap-2">
         <Button asChild variant="admin" size="sm"><Link to="/admin/cars"><ChevronLeft className="size-3.5" />Retour</Link></Button>
         <Button variant="hero" size="sm" onClick={() => setDialogOpen(true)}>Modifier</Button>
-        <Button asChild variant="ghost" size="sm" className="text-primary-foreground/70 hover:text-primary-foreground"><Link to={`/admin/cars/${id}/maintenance`}><Wrench className="mr-1.5 size-3.5" />Maintenance</Link></Button>
+        <Button asChild variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900"><Link to={`/admin/cars/${id}/maintenance`}><Wrench className="mr-1.5 size-3.5" />Maintenance</Link></Button>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_1.4fr]">
@@ -1429,10 +1436,16 @@ function CreateWalkInDialog({ open, onOpenChange }: { open: boolean; onOpenChang
 
 // ─── Admin reservations page ───────────────────────────────────────────────
 
+type ContractModalForm = { fuel_level: string; km_at_pickup: string; car_condition_notes: string; deposit: string; additional_notes: string };
+function defaultContractModal(): ContractModalForm {
+  return { fuel_level: "", km_at_pickup: "", car_condition_notes: "", deposit: "", additional_notes: "" };
+}
+
 export function AdminReservations() {
   const { data: reservations = [], isLoading } = useAllReservations();
   const updateStatus = useUpdateReservationStatus();
   const updateCar = useUpdateCar();
+  const upsertContract = useUpsertContract();
   const autoComplete = useAutoCompleteReservations();
 
   useEffect(() => {
@@ -1458,6 +1471,8 @@ export function AdminReservations() {
   const [rejectReason, setRejectReason] = useState("");
   const [completeTarget, setCompleteTarget] = useState<{ id: string; carId: string; carName: string } | null>(null);
   const [returnKm, setReturnKm] = useState("");
+  const [contractTarget, setContractTarget] = useState<ReservationWithDetails | null>(null);
+  const [contractModalForm, setContractModalForm] = useState<ContractModalForm>(defaultContractModal());
 
   useEffect(() => { setPage(0); }, [statusFilter, search, dateFrom, dateTo, pageSize]);
 
@@ -1485,10 +1500,32 @@ export function AdminReservations() {
   const totalPages = Math.ceil(filtered.length / pageSize);
   const paginated = filtered.slice(page * pageSize, (page + 1) * pageSize);
 
-  async function handleConfirm(id: string) {
+  function handleConfirm(r: ReservationWithDetails) {
+    setContractTarget(r);
+    setContractModalForm(defaultContractModal());
+  }
+
+  async function handleConfirmWithContract() {
+    if (!contractTarget) return;
     try {
-      await updateStatus.mutateAsync({ id, status: "CONFIRMED" });
-      toast.success("Réservation confirmée");
+      await upsertContract.mutateAsync({
+        reservation_id: contractTarget.id,
+        fuel_level: contractModalForm.fuel_level || null,
+        km_at_pickup: contractModalForm.km_at_pickup ? Number(contractModalForm.km_at_pickup) : null,
+        car_condition_notes: contractModalForm.car_condition_notes || null,
+        deposit: contractModalForm.deposit ? Number(contractModalForm.deposit) : null,
+        additional_notes: contractModalForm.additional_notes || null,
+      });
+      await updateStatus.mutateAsync({ id: contractTarget.id, status: "CONFIRMED" });
+      printContract(contractTarget, {
+        fuel_level: contractModalForm.fuel_level,
+        km_at_pickup: contractModalForm.km_at_pickup ? Number(contractModalForm.km_at_pickup) : null,
+        car_condition_notes: contractModalForm.car_condition_notes,
+        deposit: contractModalForm.deposit ? Number(contractModalForm.deposit) : null,
+        additional_notes: contractModalForm.additional_notes,
+      });
+      toast.success("Réservation confirmée et contrat généré");
+      setContractTarget(null);
     } catch (err) { toast.error((err as Error).message); }
   }
 
@@ -1594,25 +1631,68 @@ export function AdminReservations() {
         </DialogContent>
       </Dialog>
 
+      {/* Accept + contract modal */}
+      <Dialog open={!!contractTarget} onOpenChange={(o) => { if (!o) setContractTarget(null); }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Confirmer la réservation</DialogTitle>
+            <p className="text-sm text-muted-foreground mt-1">
+              {contractTarget && `${contractTarget.user.name} · ${contractTarget.car.brand} ${contractTarget.car.model} · ${contractTarget.start_date} → ${contractTarget.end_date}`}
+            </p>
+          </DialogHeader>
+          <div className="grid gap-3 py-2">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="grid gap-1.5">
+                <Label>Niveau carburant</Label>
+                <Input value={contractModalForm.fuel_level} onChange={(e) => setContractModalForm((f) => ({ ...f, fuel_level: e.target.value }))} placeholder="Ex: Plein, 3/4…" />
+              </div>
+              <div className="grid gap-1.5">
+                <Label>Km au départ</Label>
+                <Input type="number" min={0} value={contractModalForm.km_at_pickup} onChange={(e) => setContractModalForm((f) => ({ ...f, km_at_pickup: e.target.value }))} placeholder="Ex: 45200" />
+              </div>
+            </div>
+            <div className="grid gap-1.5">
+              <Label>Caution / Dépôt (TND)</Label>
+              <Input type="number" min={0} value={contractModalForm.deposit} onChange={(e) => setContractModalForm((f) => ({ ...f, deposit: e.target.value }))} placeholder="Ex: 500" />
+            </div>
+            <div className="grid gap-1.5">
+              <Label>État de la carrosserie</Label>
+              <Textarea value={contractModalForm.car_condition_notes} onChange={(e) => setContractModalForm((f) => ({ ...f, car_condition_notes: e.target.value }))} placeholder="Ex: Rayure légère aile avant gauche…" rows={2} />
+            </div>
+            <div className="grid gap-1.5">
+              <Label>Remarques générales</Label>
+              <Textarea value={contractModalForm.additional_notes} onChange={(e) => setContractModalForm((f) => ({ ...f, additional_notes: e.target.value }))} rows={2} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setContractTarget(null)}>Annuler</Button>
+            <Button variant="premium" onClick={handleConfirmWithContract} disabled={upsertContract.isPending || updateStatus.isPending}>
+              {(upsertContract.isPending || updateStatus.isPending) ? "Confirmation…" : "Confirmer et générer le contrat"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <CreateWalkInDialog open={newResOpen} onOpenChange={setNewResOpen} />
 
       <Panel>
-        <CardHeader>
+        <CardHeader className="pb-0">
           {/* Status filter tabs */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="-mx-6 flex overflow-x-auto border-b border-slate-200 px-6">
             <button
               onClick={() => setStatusFilter("ALL")}
-              className={`rounded-md px-3 py-1.5 text-sm font-bold transition ${statusFilter === "ALL" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
+              className={`shrink-0 border-b-2 px-4 py-3 text-sm font-semibold transition-colors ${statusFilter === "ALL" ? "border-slate-900 text-slate-900" : "border-transparent text-slate-400 hover:text-slate-700"}`}
             >
-              Toutes ({reservations.length})
+              Toutes <span className="ml-1 rounded-full bg-slate-100 px-1.5 py-0.5 text-xs font-bold text-slate-600">{reservations.length}</span>
             </button>
             {ALL_STATUSES.map((s) => (
               <button
                 key={s}
                 onClick={() => setStatusFilter(s)}
-                className={`rounded-md px-3 py-1.5 text-sm font-bold transition ${statusFilter === s ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
+                className={`shrink-0 border-b-2 px-4 py-3 text-sm font-semibold transition-colors ${statusFilter === s ? "border-slate-900 text-slate-900" : "border-transparent text-slate-400 hover:text-slate-700"}`}
               >
-                {STATUS_LABELS[s].label} ({counts[s]})
+                {STATUS_LABELS[s].label}
+                {counts[s] > 0 && <span className={`ml-1 rounded-full px-1.5 py-0.5 text-xs font-bold ${STATUS_LABELS[s].cls}`}>{counts[s]}</span>}
               </button>
             ))}
           </div>
@@ -1680,38 +1760,41 @@ export function AdminReservations() {
               {paginated.map((r) => {
                 const cfg = STATUS_LABELS[r.status];
                 return (
-                  <div key={r.id} className="grid gap-3 rounded-md border border-border bg-surface p-4 lg:grid-cols-[1fr_1fr_auto] lg:items-center">
-                    <div>
-                      <p className="font-extrabold">{r.user.name}</p>
-                      <p className="text-sm text-muted-foreground">CIN {r.user.cin} · {r.user.phone}</p>
-                      {r.rejection_reason && (
-                        <p className="mt-1 text-xs text-destructive">{r.rejection_reason}</p>
-                      )}
-                    </div>
-                    <div>
-                      <p className="font-bold">{r.car.brand} {r.car.model}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {fmtDate(r.start_date)} → {fmtDate(r.end_date)} · {r.total_price} TND
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className={`rounded-md px-2 py-1 text-xs font-bold ${cfg.cls}`}>{cfg.label}</span>
-                      {r.status === "PENDING" && (
-                        <>
-                          <Button variant="premium" size="sm" onClick={() => handleConfirm(r.id)} disabled={updateStatus.isPending}>Confirmer</Button>
-                          <Button variant="outline" size="sm" className="text-destructive border-destructive/40 hover:bg-destructive/10" onClick={() => setRejectTarget(r.id)}>Refuser</Button>
-                        </>
-                      )}
-                      {r.status === "CONFIRMED" && (
-                        <Button size="sm" variant="outline" onClick={() => { setCompleteTarget({ id: r.id, carId: r.car.id, carName: `${r.car.brand} ${r.car.model}` }); setReturnKm(""); }}>
-                          <Check className="mr-1 size-3.5" />Terminer
-                        </Button>
-                      )}
-                      {(r.status === "CONFIRMED" || r.status === "COMPLETED") && (
-                        <Button asChild variant="ghost" size="sm">
-                          <Link to={`/admin/reservations/${r.id}`}><FileText className="size-3.5 mr-1" />Contrat</Link>
-                        </Button>
-                      )}
+                  <div key={r.id} className="relative overflow-hidden rounded-lg border border-slate-100 bg-white transition hover:border-slate-200 hover:shadow-sm">
+                    <div className={`absolute inset-y-0 left-0 w-1 ${cfg.bar}`} />
+                    <div className="grid gap-3 p-4 pl-5 lg:grid-cols-[1fr_1fr_auto] lg:items-center">
+                      <div>
+                        <p className="font-bold text-slate-900">{r.user.name}</p>
+                        <p className="text-sm text-slate-500">CIN {r.user.cin} · {r.user.phone}</p>
+                        {r.rejection_reason && (
+                          <p className="mt-1 text-xs text-red-500">{r.rejection_reason}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-slate-800">{r.car.brand} {r.car.model}</p>
+                        <p className="text-sm text-slate-500">
+                          {fmtDate(r.start_date)} → {fmtDate(r.end_date)} · <span className="font-semibold text-slate-700">{r.total_price} TND</span>
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className={`rounded-md px-2 py-1 text-xs font-bold ${cfg.cls}`}>{cfg.label}</span>
+                        {r.status === "PENDING" && (
+                          <>
+                            <Button variant="premium" size="sm" onClick={() => handleConfirm(r)} disabled={updateStatus.isPending}>Confirmer</Button>
+                            <Button variant="outline" size="sm" className="border-red-200 text-red-600 hover:bg-red-50" onClick={() => setRejectTarget(r.id)}>Refuser</Button>
+                          </>
+                        )}
+                        {r.status === "CONFIRMED" && (
+                          <Button size="sm" variant="outline" className="border-slate-200 text-slate-700" onClick={() => { setCompleteTarget({ id: r.id, carId: r.car.id, carName: `${r.car.brand} ${r.car.model}` }); setReturnKm(""); }}>
+                            <Check className="mr-1 size-3.5" />Terminer
+                          </Button>
+                        )}
+                        {(r.status === "CONFIRMED" || r.status === "COMPLETED") && (
+                          <Button asChild variant="ghost" size="sm" className="text-slate-500 hover:text-slate-800">
+                            <Link to={`/admin/reservations/${r.id}`}><FileText className="size-3.5 mr-1" />Contrat</Link>
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
@@ -1745,62 +1828,250 @@ function defaultContractForm(): ContractForm {
 }
 
 function printContract(r: NonNullable<ReturnType<typeof useReservation>["data"]>, form: ContractForm) {
-  const days = Math.max(1, Math.round((new Date(r.end_date).getTime() - new Date(r.start_date).getTime()) / 86_400_000));
   const fmt = (d: string) => new Date(d).toLocaleDateString("fr-TN", { day: "numeric", month: "long", year: "numeric" });
-  const win = window.open("", "_blank", "width=900,height=700");
+  const isSansPlomb = r.car.fuel === "Essence";
+  const isGasoil    = r.car.fuel === "Diesel";
+  const cbS = isSansPlomb ? "&#10003;" : "&nbsp;";
+  const cbG = isGasoil    ? "&#10003;" : "&nbsp;";
+  const win = window.open("", "_blank", "width=1050,height=820");
   if (!win) return;
-  win.document.write(`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Contrat de location</title>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; color: #111; font-size: 14px; }
-    h1 { font-size: 22px; text-align: center; border-bottom: 2px solid #111; padding-bottom: 10px; margin-bottom: 24px; }
-    h2 { font-size: 15px; background: #f0f0f0; padding: 6px 10px; margin-top: 20px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
-    .field { margin: 6px 0; }
-    .label { font-weight: bold; font-size: 12px; color: #555; }
-    .value { border-bottom: 1px solid #bbb; padding: 2px 0; min-height: 20px; }
-    .total { font-size: 18px; font-weight: bold; text-align: right; margin-top: 16px; }
-    .signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 60px; }
-    .sig-box { border-top: 1px solid #111; padding-top: 6px; font-size: 12px; }
-    @media print { body { margin: 20px; } }
-  </style></head><body>
-  <h1>CONTRAT DE LOCATION DE VÉHICULE</h1>
-  <h2>Informations client</h2>
-  <div class="grid">
-    <div class="field"><div class="label">Nom complet</div><div class="value">${r.user.name}</div></div>
-    <div class="field"><div class="label">CIN</div><div class="value">${r.user.cin}</div></div>
-    <div class="field"><div class="label">Téléphone</div><div class="value">${r.user.phone}</div></div>
-    <div class="field"><div class="label">N° Permis</div><div class="value">${r.user.permis_id}</div></div>
-    <div class="field"><div class="label">Adresse</div><div class="value">${r.user.address ?? ""}</div></div>
-    <div class="field"><div class="label">Email</div><div class="value">${r.user.email}</div></div>
+
+  win.document.write(`<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><title>Contrat de Location</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:9.5px;color:#000;background:#fff}
+.page{width:210mm;padding:7mm 7mm 5mm;margin:0 auto}
+/* header */
+.hdr{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:start;border-bottom:2px solid #000;padding-bottom:5px;margin-bottom:4px}
+.co{font-size:8.5px;line-height:1.55}.co b{font-size:11px}
+.logo{text-align:center}
+.logo-txt{font-size:30px;font-weight:900;font-family:"Arial Black",Arial,sans-serif;letter-spacing:-1px;line-height:1}
+.logo-sub{font-size:8px;letter-spacing:3px;color:#555}
+.ttl{text-align:right}.ttl .fr{font-size:17px;font-weight:bold}.ttl .ar{font-size:17px;font-family:Arial,sans-serif;direction:rtl}
+/* two columns */
+.cols{display:grid;grid-template-columns:1fr 1px 1fr;gap:0}
+.cl{padding-right:5px}.cr{padding-left:5px}
+.div{background:#000}
+/* section headers */
+.sh{background:#F5B800;display:flex;justify-content:space-between;align-items:center;padding:2px 5px;margin:3px 0 2px;border:1px solid #C9A000}
+.sh .fr{font-weight:bold;font-size:9px}
+.sh .fri{font-weight:bold;font-style:italic;font-size:9px}
+.sh .ar{font-weight:bold;font-size:9px;direction:rtl;font-family:Arial,sans-serif}
+/* fields */
+.f{display:flex;align-items:baseline;gap:2px;border-bottom:1px dotted #aaa;min-height:13px;margin-bottom:1px;padding-bottom:1px}
+.fl{font-size:8px;white-space:nowrap;flex-shrink:0}
+.fv{flex:1;font-size:9px;font-weight:bold;min-width:0}
+.fa{font-size:8px;white-space:nowrap;direction:rtl;font-family:Arial,sans-serif;flex-shrink:0}
+/* two-col sub-grid */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+/* fuel */
+.fuel{display:flex;align-items:center;gap:6px;margin:3px 0}
+.fb{display:flex;align-items:center;gap:3px;font-size:11px;font-weight:bold;border:2px solid #000;padding:2px 6px}
+.cb{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid #000;font-size:10px;margin-right:2px}
+/* car diagram */
+.diag{text-align:center;margin:3px 0}
+.legend{text-align:center;font-size:8px;margin-top:1px}
+/* sigs */
+.sigs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:5px;padding-top:4px;border-top:1px solid #000}
+.sb{font-size:8px}.sl{border-bottom:1px solid #000;min-height:26px;margin:3px 0}
+/* footnote */
+.fn{font-size:7px;margin-top:3px;border-top:1px solid #ccc;padding-top:2px}
+/* conditions */
+.cond{font-size:7px;line-height:1.3;margin-top:2px}
+@media print{.page{padding:5mm}body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style></head>
+<body><div class="page">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="co">
+    <b>FALCON RENT A CAR</b><br>
+    Rue Banou Houd - 1057 La Marsa, Tunis<br>
+    GSM : 28 778 392 / 27 490 097<br>
+    E-mail : falconrentcar2022@gmail.com<br>
+    Code TVA : 1776178V
   </div>
-  <h2>Véhicule</h2>
-  <div class="grid">
-    <div class="field"><div class="label">Véhicule</div><div class="value">${r.car.brand} ${r.car.model} (${r.car.year})</div></div>
-    <div class="field"><div class="label">Matricule</div><div class="value">${r.car.matricule}</div></div>
-    <div class="field"><div class="label">Couleur</div><div class="value">${r.car.color}</div></div>
-    <div class="field"><div class="label">Transmission</div><div class="value">${r.car.transmission}</div></div>
+  <div class="logo">
+    <div class="logo-txt">FALCON</div>
+    <div class="logo-sub">RENT A CAR</div>
   </div>
-  <h2>Détails de la location</h2>
-  <div class="grid">
-    <div class="field"><div class="label">Date de départ</div><div class="value">${fmt(r.start_date)}</div></div>
-    <div class="field"><div class="label">Date de retour</div><div class="value">${fmt(r.end_date)}</div></div>
-    <div class="field"><div class="label">Durée</div><div class="value">${days} jour(s)</div></div>
-    <div class="field"><div class="label">Prix/jour</div><div class="value">${r.car.price_per_day} TND</div></div>
-    <div class="field"><div class="label">Km au départ</div><div class="value">${form.km_at_pickup ?? ""}</div></div>
-    <div class="field"><div class="label">Niveau carburant</div><div class="value">${form.fuel_level ?? ""}</div></div>
-    <div class="field"><div class="label">Caution / Dépôt</div><div class="value">${form.deposit != null ? form.deposit + " TND" : ""}</div></div>
-    <div class="field"><div class="label">État carrosserie</div><div class="value">${form.car_condition_notes ?? ""}</div></div>
+  <div class="ttl">
+    <div class="fr">Contrat de Location</div>
+    <div class="ar">عقد كراء</div>
   </div>
-  ${form.additional_notes ? `<h2>Remarques</h2><p>${form.additional_notes}</p>` : ""}
-  <div class="total">Total : ${r.total_price} TND</div>
-  <div class="signatures">
-    <div class="sig-box">Signature du loueur</div>
-    <div class="sig-box">Signature du locataire</div>
+</div>
+
+<!-- COLUMNS -->
+<div class="cols">
+
+<!-- ══ LEFT ══ -->
+<div class="cl">
+
+  <div class="sh"><span class="fr">Identité du Locataire</span><span class="ar">هوية المستأجر</span></div>
+  <div class="f"><span class="fl">Sté :</span><span class="fv"></span><span class="fl" style="margin-left:6px">MF :</span><span class="fv"></span></div>
+
+  <div class="sh"><span class="fr">Identité du 1<sup>er</sup> Conducteur</span><span class="ar">هوية السائق الأول</span></div>
+  <div class="f"><span class="fl">Nom et Prénom :</span><span class="fv">${r.user.name}</span><span class="fa">: الاسم واللقب</span></div>
+  <div class="f"><span class="fl">Date et Lieu de naissance :</span><span class="fv"></span><span class="fa">: تاريخ ومكان الولادة</span></div>
+  <div class="f"><span class="fl">Nationalité :</span><span class="fv"></span><span class="fa">: الجنسية</span></div>
+  <div class="f"><span class="fl">C.I.N. N° :</span><span class="fv">${r.user.cin}</span><span class="fa">: رقم بطاقة تعريف وطنية</span></div>
+  <div class="f"><span class="fl">Passeport n° :</span><span class="fv"></span><span class="fa">: رقم جواز السفر</span></div>
+  <div class="f"><span class="fl">Délivrée le :</span><span class="fv"></span><span class="fa">: تاريخ الإصدار</span></div>
+  <div class="f"><span class="fl">Permis de conduire n° :</span><span class="fv">${r.user.permis_id}</span><span class="fa">: رخصة السياقة</span></div>
+  <div class="f"><span class="fl">Délivrée le :</span><span class="fv"></span><span class="fa">: تاريخ الإصدار</span></div>
+  <div class="f"><span class="fl">Adresse :</span><span class="fv">${r.user.address ?? ""}</span><span class="fa">: العنوان</span></div>
+  <div class="f"><span class="fl">Tél. :</span><span class="fv">${r.user.phone}</span><span class="fl">GSM :</span><span class="fv"></span><span class="fa">: المحمول</span></div>
+
+  <div class="sh"><span class="fr">Identité du 2<sup>ème</sup> Conducteur</span><span class="ar">هوية السائق الثاني</span></div>
+  <div class="f"><span class="fl">Nom et Prénom :</span><span class="fv"></span><span class="fa">: الاسم واللقب</span></div>
+  <div class="f"><span class="fl">Date et Lieu de naissance :</span><span class="fv"></span><span class="fa">: تاريخ ومكان الولادة</span></div>
+  <div class="f"><span class="fl">Nationalité :</span><span class="fv"></span><span class="fa">: الجنسية</span></div>
+  <div class="f"><span class="fl">C.I.N. N° :</span><span class="fv"></span><span class="fa">: رقم بطاقة تعريف وطنية</span></div>
+  <div class="f"><span class="fl">Passeport n° :</span><span class="fv"></span><span class="fa">: رقم جواز السفر</span></div>
+  <div class="f"><span class="fl">Délivrée le :</span><span class="fv"></span><span class="fa">: تاريخ الإصدار</span></div>
+  <div class="f"><span class="fl">Permis de conduire n° :</span><span class="fv"></span><span class="fa">: رخصة السياقة</span></div>
+  <div class="f"><span class="fl">Délivrée le :</span><span class="fv"></span><span class="fa">: تاريخ الإصدار</span></div>
+  <div class="f"><span class="fl">Adresse :</span><span class="fv"></span><span class="fa">: العنوان</span></div>
+  <div class="f"><span class="fl">Tél. :</span><span class="fv"></span><span class="fl">GSM :</span><span class="fv"></span><span class="fa">: المحمول</span></div>
+
+  <div class="sh"><span class="fr">Etat du véhicule</span><span class="ar">حالة السيارة</span></div>
+  <div class="diag">
+    <svg width="195" height="145" viewBox="0 0 195 145" xmlns="http://www.w3.org/2000/svg">
+      <rect x="52" y="13" width="91" height="119" rx="20" fill="#f8f8f8" stroke="#333" stroke-width="1.5"/>
+      <path d="M62,13 Q97,5 133,13" fill="none" stroke="#333" stroke-width="1"/>
+      <path d="M62,132 Q97,140 133,132" fill="none" stroke="#333" stroke-width="1"/>
+      <line x1="57" y1="37" x2="138" y2="37" stroke="#333" stroke-width="1.5"/>
+      <line x1="57" y1="108" x2="138" y2="108" stroke="#333" stroke-width="1.5"/>
+      <line x1="52" y1="72" x2="143" y2="72" stroke="#888" stroke-width="0.5" stroke-dasharray="2,2"/>
+      <rect x="33" y="19" width="19" height="33" rx="5" fill="#ddd" stroke="#333" stroke-width="1.5"/>
+      <rect x="143" y="19" width="19" height="33" rx="5" fill="#ddd" stroke="#333" stroke-width="1.5"/>
+      <rect x="33" y="93" width="19" height="33" rx="5" fill="#ddd" stroke="#333" stroke-width="1.5"/>
+      <rect x="143" y="93" width="19" height="33" rx="5" fill="#ddd" stroke="#333" stroke-width="1.5"/>
+      <text x="18" y="76" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">G</text>
+      <text x="177" y="76" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">D</text>
+      <text x="97" y="7" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">Av</text>
+      <text x="97" y="144" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">Ar</text>
+    </svg>
   </div>
-  </body></html>`);
+  <div class="legend">-- Rayure &nbsp;&nbsp; 0 Manquant &nbsp;&nbsp; X Bosselure</div>
+  ${form.car_condition_notes ? `<div style="font-size:8px;margin-top:2px;border:1px solid #ccc;padding:2px 4px">${form.car_condition_notes}</div>` : ""}
+
+  <div class="sigs">
+    <div class="sb"><b>Le Client :</b><br>Lu et Approuvé (1)<br><em>Signature</em><div class="sl"></div></div>
+    <div class="sb"><b>Votre Agent :</b><div class="sl"></div>Fait A ............... le ...............<br><em>Cachet de l'agence</em></div>
+  </div>
+  <div class="fn">
+    (1) J'ai lu et j'ai approuvé les informations et les conditions générales recto-verso de ce contrat, ainsi que les informations portés sur le reçu.<br>
+    <span style="direction:rtl;display:block;text-align:right;font-family:Arial">اطلعت على المعلومات و الشروط الموجودة في العقد و خلفة وصادقت عليها</span>
+  </div>
+
+</div><!-- /left -->
+
+<div class="div"></div>
+
+<!-- ══ RIGHT ══ -->
+<div class="cr">
+
+  <div class="sh"><span class="fri">Identification du Véhicule</span><span class="ar">هوية السيارة</span></div>
+  <div style="display:flex;justify-content:space-between;font-size:8px;margin-bottom:1px">
+    <span>Marque et Type</span><span style="direction:rtl;font-family:Arial">نوع السيارة</span>
+  </div>
+  <div class="f"><span class="fv">${r.car.brand} ${r.car.model} (${r.car.year})</span></div>
+  <div style="display:flex;justify-content:space-between;font-size:8px;margin-bottom:1px">
+    <span>Immatriculation</span><span style="direction:rtl;font-family:Arial">الرقم المنجمي</span>
+  </div>
+  <div class="f"><span class="fv">${r.car.matricule}</span></div>
+  <div class="fuel">
+    <div class="fb"><span class="cb">${cbS}</span>Super Sans Plomb</div>
+    <div class="fb"><span class="cb">${cbG}</span>Gasoil 50</div>
+  </div>
+
+  <div class="sh"><span class="fri">Changement du Véhicule</span><span class="ar">تغيير السيارة</span></div>
+  <div style="display:flex;justify-content:space-between;font-size:8px;margin-bottom:1px"><span>Marque et Type</span><span style="direction:rtl;font-family:Arial">نوع السيارة</span></div>
+  <div class="f"><span class="fv"></span></div>
+  <div style="display:flex;justify-content:space-between;font-size:8px;margin-bottom:1px"><span>Immatriculation</span><span style="direction:rtl;font-family:Arial">الرقم المنجمي</span></div>
+  <div class="f"><span class="fv"></span></div>
+  <div class="f"><span class="fl">Date et Heure :</span><span class="fv"></span><span class="fa">: (التاريخ والساعة)</span></div>
+
+  <div class="sh"><span class="fri">Durée de Location</span><span class="ar">مدة الكراء</span></div>
+  <div class="g2" style="font-size:8px;margin-bottom:1px">
+    <div><em>Date de départ</em> <span style="direction:rtl;font-family:Arial">تاريخ الخروج</span></div>
+    <div><em>Date de retour prévu</em> <span style="direction:rtl;font-family:Arial">تاريخ العودة</span></div>
+  </div>
+  <div class="g2" style="margin-bottom:2px">
+    <div class="f"><span class="fv">${fmt(r.start_date)}</span></div>
+    <div class="f"><span class="fv">${fmt(r.end_date)}</span></div>
+  </div>
+  <div class="g2">
+    <div class="f"><span class="fl"><em>Heure</em> :</span><span class="fv"></span><span class="fa">الساعة</span></div>
+    <div class="f"><span class="fl"><em>Heure</em> :</span><span class="fv"></span><span class="fa">الساعة</span></div>
+  </div>
+  <div class="g2">
+    <div class="f"><span class="fl"><em>Lieu</em></span><span class="fv"></span><span class="fa">المكان</span></div>
+    <div class="f"><span class="fl"><em>Lieu</em></span><span class="fv"></span><span class="fa">المكان</span></div>
+  </div>
+
+  <div class="sh"><span class="fri">Prolongations</span><span class="ar">التمـديـد</span></div>
+  <div class="g2">
+    <div class="f"><span class="fl">du</span><span class="fv"></span><span class="fa">إلى يوم</span></div>
+    <div class="f"><span class="fl">du</span><span class="fv"></span><span class="fa">من يوم</span></div>
+  </div>
+  <div class="g2">
+    <div class="f"><span class="fl"><em>Heure</em> :</span><span class="fv"></span><span class="fa">الساعة</span></div>
+    <div class="f"><span class="fl"><em>Heure</em> :</span><span class="fv"></span><span class="fa">الساعة</span></div>
+  </div>
+
+  <div class="sh"><span class="fri">Encaissement</span><span class="ar">معلوم الخلاص</span></div>
+  <div class="g2">
+    <div class="f"><span class="fl">Date</span><span class="fv"></span><span class="fa">التاريخ</span></div>
+    <div class="f"><span class="fl">Nature</span><span class="fv"></span><span class="fa">طريقة الدفع</span></div>
+  </div>
+  <div class="f"><span class="fl">Montant HT</span><span class="fv"></span><span class="fa">المبلغ .................................</span></div>
+  <div class="f"><span class="fl">TVA 19%</span><span class="fv"></span><span style="font-size:8px">.................................</span></div>
+  <div class="f"><span class="fl">Timbre</span><span class="fv"></span><span style="font-size:8px">.................................</span></div>
+  <div class="f"><span class="fl">Prix Total TTC</span><span class="fv" style="font-weight:bold">${r.total_price} TND</span><span class="fa">المبلغ الجملي .................</span></div>
+
+  <div class="sh"><span class="fri">Kilométrage</span><span class="ar">كيلوماتر</span></div>
+  <div class="g2">
+    <div class="f"><span class="fl"><em>Kilomètre départ</em></span><span class="fv">${form.km_at_pickup ?? ""}</span><span class="fa">كيلوماتر الخروج</span></div>
+    <div class="f"><span class="fl"><em>Kilomètre retour</em></span><span class="fv"></span><span class="fa">كيلوماتر الدخول</span></div>
+  </div>
+
+  <div class="sh"><span class="fri">Garantie</span><span class="ar">الضمـان</span></div>
+  <div class="g2">
+    <div class="f"><span class="fl">Montant</span><span class="fv">${form.deposit != null ? form.deposit + " TND" : ""}</span><span class="fa">المبلغ</span></div>
+    <div class="f"><span class="fl">Nature</span><span class="fv"></span><span class="fa">طريقة الدفع</span></div>
+  </div>
+
+  <div class="f" style="margin-top:3px">
+    <span class="fl"><em>Date de retour effectif</em></span><span class="fv"></span>
+    <span class="fl"><em>Heure</em></span><span class="fv"></span>
+    <span class="fa">التاريخ الفعلي للعودة &nbsp; الساعة</span>
+  </div>
+  <div style="font-size:8.5px;font-style:italic;margin:2px 0 3px"><em>Signature Client (e) au retour</em></div>
+  <div style="border-bottom:1px solid #000;min-height:18px;margin-bottom:4px"></div>
+
+  <div class="sh"><span class="fri">Conditions / Modalités</span><span class="ar">شروط الكراء</span></div>
+  <div class="cond">
+    Le Locataire reconnait sa responsabilité pour toute contravention relative à la circulation routière, radar automatique, stationnement et transport de marchandises. Admet que :<br>
+    * Le véhicule loué est assuré avec une formule au tiers. En cas d'accident le locataire doit payer tous frais nécessaires à la prise en charge et l'immobilisation du véhicule ainsi qu'à la réparation des dégâts causés. La responsabilité du locataire est déterminée sur la base du constat amiable ou à travers le rapport des organisations spécialisées.<br>
+    * Il est strictement interdit de faire des travaux de réparation (Quelle qu'en soit la nature) sur le véhicule loué sans une autorisation écrite par le loueur.<br>
+    * Le kilométrage est limité à 400 km/jour. Tout excès sera facturé sur la base de 500ml/km.<br>
+    <div style="direction:rtl;text-align:right;font-family:Arial;margin-top:2px">
+      يتحمل المستأجر مسؤولية كل المخالفات المتعلقة بضوابط الطريق، الرادار الآلي، الوقوف، الشواهد، البضائع المنقولة. يصرح بأنه يعلم أن السيارة مؤمنة حسب نظام المسؤولية المدنية. وفي حالة وقوع حادث فالمستأجر يتحمل معاملة المصاريف المتعلقة بالإصلاحات وفي نقل السيارة. يمنع منعاً باتاً القيام بأي نوع من أنواع تحسين السيارة بدون تصريح كتابي من المسؤول. ولا يجوز تجاوز معدل الكيلومترات المقطوعة 400كم/اليوم، يقع إحتساب الكيلومترات الزائدة حسب سعر 500م/الكم.
+    </div>
+    ${form.additional_notes ? `<div style="margin-top:2px;border-top:1px solid #ccc;padding-top:2px"><b>Notes :</b> ${form.additional_notes}</div>` : ""}
+  </div>
+
+</div><!-- /right -->
+</div><!-- /cols -->
+</div><!-- /page -->
+</body></html>`);
+
   win.document.close();
   win.focus();
-  setTimeout(() => win.print(), 400);
+  setTimeout(() => win.print(), 500);
 }
 
 export function ContractPage() {
@@ -1840,11 +2111,17 @@ export function ContractPage() {
   if (isLoading) return <AdminShell title="Contrat"><p className="py-20 text-center text-muted-foreground">Chargement…</p></AdminShell>;
   if (!reservation) return <AdminShell title="Contrat"><p className="py-20 text-center text-muted-foreground">Réservation introuvable.</p></AdminShell>;
 
+  const isConfirmed = reservation.status === "CONFIRMED";
   const days = Math.max(1, Math.round((new Date(reservation.end_date).getTime() - new Date(reservation.start_date).getTime()) / 86_400_000));
   const fmt = (d: string) => new Date(d).toLocaleDateString("fr-TN", { day: "numeric", month: "short", year: "numeric" });
 
   return (
     <AdminShell title="Contrat de location">
+      {!isConfirmed && (
+        <div className="mb-4 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          Cette réservation est <strong>{reservation.status}</strong> — le contrat ne peut être généré que pour une réservation confirmée.
+        </div>
+      )}
       <div className="grid gap-6 lg:grid-cols-[1fr_0.85fr]">
         {/* Manual fields */}
         <Panel>
@@ -1875,10 +2152,10 @@ export function ContractPage() {
               <Textarea value={form.additional_notes ?? ""} onChange={(e) => setF("additional_notes", e.target.value)} rows={2} />
             </div>
             <div className="flex gap-3">
-              <Button variant="hero" className="flex-1" onClick={handleSave} disabled={upsertContract.isPending}>
+              <Button variant="hero" className="flex-1" onClick={handleSave} disabled={upsertContract.isPending || !isConfirmed}>
                 {upsertContract.isPending ? "Enregistrement…" : saved ? "Enregistré ✓" : "Enregistrer"}
               </Button>
-              <Button variant="premium" className="flex-1" onClick={() => printContract(reservation, form)} disabled={!saved}>
+              <Button variant="premium" className="flex-1" onClick={() => printContract(reservation, form)} disabled={!saved || !isConfirmed}>
                 <FileText className="size-4" />Imprimer PDF
               </Button>
             </div>
